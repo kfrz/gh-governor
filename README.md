@@ -149,14 +149,7 @@ For **repositories**, the available default Enforcers are:
 
 `gh-governor` is an open source project and contributions are welcome!
 
-`.pre-commit-config.yaml` is included to help with linting and formatting. To install the pre-commit hooks, ensure you have [pre-commit](https://pre-commit.com) installed then run:
-
-```sh
-pre-commit install
-# or, selectively install hook types
-pre-commit install --hook-type commit-msg
-```
-<!-- TODO: Check out the [CONTRIBUTING](./CONTRIBUTING.md) guide to get started. -->
+Check out the [CONTRIBUTING](./CONTRIBUTING.md) guide to get started.
 
 #### License & Authors
 
