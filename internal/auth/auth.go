@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
+	"github.com/kfrz/gh-governor/internal/queries"
 	"github.com/kfrz/gh-governor/internal/repo"
 )
 
@@ -31,13 +32,7 @@ var Client GraphQLClient = &DefaultClient{}
 // checkAuthStatus checks if the user is authenticated to github.com
 // and prints the current user status if so
 func CheckAuthStatus(cmd *cobra.Command, args []string) error {
-	var query struct {
-		Viewer struct {
-			Login string
-		}
-	}
-
-	// Use the Client variable instead of directly calling gh.DefaultGraphQLClient()
+	query := queries.UserCurrentQuery{}
 	if err := Client.Query("UserCurrent", &query, nil); err != nil {
 		zap.L().Error("Authentication failed", zap.Error(err))
 		return fmt.Errorf("failed to fetch current user details: %v", err)
@@ -46,7 +41,7 @@ func CheckAuthStatus(cmd *cobra.Command, args []string) error {
 	err := repo.PrintCurrentRepoStatus()
 	if err != nil {
 		zap.L().Error("Failed to get repository status", zap.Error(err))
-		return err
+		return fmt.Errorf("failed while checking repo status: %w", err)
 	}
 
 	zap.L().Debug("Authenticated to github.com", zap.String("user", query.Viewer.Login))
