@@ -4,7 +4,8 @@
 
 <a href="https://github.com/kfrz/gh-governor/actions"><img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/kfrz/gh-governor/release.yml?event=push&style=flat-square"></a>
 <a href="https://github.com/kfrz/gh-governor/releases"><img src="https://img.shields.io/github/release/kfrz/gh-governor.svg" alt="Latest Release"></a>
-<a href="https://github.com/kfrz/gh-governor/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/kfrz/gh-governor"></a>
+<a href="./LICENSE.txt"><img alt="GitHub" src="https://img.shields.io/github/license/kfrz/gh-governor"></a>
+<a href="https://goreportcard.com/report/github.com/kfrz/gh-governor"><img alt="Go ReportCard" src="https://goreportcard.com/badge/github.com/kfrz/gh-governor"></a>
 
 ## 🔋 Features
 

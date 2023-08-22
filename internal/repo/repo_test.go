@@ -1,26 +1,16 @@
 package repo
 
 import (
-	"errors"
 	"testing"
 
-	"github.com/cli/go-gh/v2/pkg/repository"
+	"github.com/stretchr/testify/assert"
+
+	"github.com/kfrz/gh-governor/mocks"
 )
-
-// Mock for the Repository that simulates a successful response
-type MockRepoSuccess struct{}
-
-func (m *MockRepoSuccess) Current() (repository.Repository, error) {
-	return repository.Repository{
-		Host:  "github.com",
-		Owner: "test-owner",
-		Name:  "test-repo",
-	}, nil
-}
 
 func TestPrintCurrentRepoStatus(t *testing.T) {
 	// Use the mock that simulates a successful response
-	Repo = &MockRepoSuccess{}
+	Repo = &mocks.MockRepoSuccess{}
 
 	err := PrintCurrentRepoStatus()
 	if err != nil {
@@ -28,18 +18,21 @@ func TestPrintCurrentRepoStatus(t *testing.T) {
 	}
 }
 
-type MockRepoError struct{}
+func TestPrintCurrentRepoStatus_Success(t *testing.T) {
+	// Use the mock that simulates a successful response
+	Repo = &mocks.MockRepoSuccess{}
 
-func (m *MockRepoError) Current() (repository.Repository, error) {
-	return repository.Repository{}, errors.New("mocked error")
+	err := PrintCurrentRepoStatus()
+
+	assert.NoError(t, err, "Expected no error for successful repo status retrieval")
 }
 
 func TestPrintCurrentRepoStatus_Error(t *testing.T) {
 	// Use the mock that returns an error
-	Repo = &MockRepoError{}
+	Repo = &mocks.MockRepoError{}
 
 	err := PrintCurrentRepoStatus()
-	if err.Error() != "mocked error" {
-		t.Fatalf("Expected 'mocked error', but got: %v", err)
-	}
+
+	assert.Error(t, err, "Expected an error for failed repo status retrieval")
+	assert.Contains(t, err.Error(), "mocked error", "Expected error message to contain 'mocked error'")
 }
