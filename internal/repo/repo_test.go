@@ -9,7 +9,6 @@ import (
 )
 
 func TestPrintCurrentRepoStatus(t *testing.T) {
-	// Use the mock that simulates a successful response
 	Repo = &mocks.MockRepoSuccess{}
 
 	err := PrintCurrentRepoStatus()
@@ -19,7 +18,6 @@ func TestPrintCurrentRepoStatus(t *testing.T) {
 }
 
 func TestPrintCurrentRepoStatus_Success(t *testing.T) {
-	// Use the mock that simulates a successful response
 	Repo = &mocks.MockRepoSuccess{}
 
 	err := PrintCurrentRepoStatus()
@@ -28,7 +26,6 @@ func TestPrintCurrentRepoStatus_Success(t *testing.T) {
 }
 
 func TestPrintCurrentRepoStatus_Error(t *testing.T) {
-	// Use the mock that returns an error
 	Repo = &mocks.MockRepoError{}
 
 	err := PrintCurrentRepoStatus()

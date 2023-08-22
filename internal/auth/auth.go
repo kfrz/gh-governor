@@ -3,37 +3,17 @@ package auth
 import (
 	"fmt"
 
-	gh "github.com/cli/go-gh/v2/pkg/api"
-	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 
+	"github.com/kfrz/gh-governor/internal/client"
 	"github.com/kfrz/gh-governor/internal/queries"
 	"github.com/kfrz/gh-governor/internal/repo"
 )
 
-// GraphQLClient is an interface that wraps the Query method
-type GraphQLClient interface {
-	Query(query string, result interface{}, variables map[string]interface{}) error
-}
-
-// DefaultClient is the default implementation of the GraphQLClient
-type DefaultClient struct{}
-
-func (d *DefaultClient) Query(query string, result interface{}, variables map[string]interface{}) error {
-	client, err := gh.DefaultGraphQLClient()
-	if err != nil {
-		return err
-	}
-	return client.Query(query, result, variables)
-}
-
-var Client GraphQLClient = &DefaultClient{}
-
-// checkAuthStatus checks if the user is authenticated to github.com
-// and prints the current user status if so
-func CheckAuthStatus(cmd *cobra.Command, args []string) error {
+// checkAuthStatus checks if the user is authenticated via the gh cli
+func CheckAuthStatus(client client.GraphQLClient) error {
 	query := queries.UserCurrentQuery{}
-	if err := Client.Query("UserCurrent", &query, nil); err != nil {
+	if err := client.Query("UserCurrent", &query, nil); err != nil {
 		zap.L().Error("Authentication failed", zap.Error(err))
 		return fmt.Errorf("failed to fetch current user details: %v", err)
 	}
@@ -44,6 +24,6 @@ func CheckAuthStatus(cmd *cobra.Command, args []string) error {
 		return fmt.Errorf("failed while checking repo status: %w", err)
 	}
 
-	zap.L().Debug("Authenticated to github.com", zap.String("user", query.Viewer.Login))
+	zap.L().Debug("Authenticated to github", zap.String("user", query.Viewer.Login))
 	return nil
 }

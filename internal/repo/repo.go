@@ -1,6 +1,8 @@
 package repo
 
 import (
+	"fmt"
+
 	"github.com/cli/go-gh/v2/pkg/repository"
 	"go.uber.org/zap"
 
@@ -23,6 +25,7 @@ func PrintCurrentRepoStatus() error {
 		return err
 	}
 	zap.L().Debug("Repo status", zap.String("host", repo.Host), zap.String("owner", repo.Owner), zap.String("name", repo.Name))
+	fmt.Printf("Current repository: %s/%s\n", repo.Owner, repo.Name)
 	return nil
 }
 

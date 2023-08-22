@@ -8,6 +8,8 @@ import (
 
 	_ "github.com/kfrz/gh-governor/config"
 	"github.com/kfrz/gh-governor/internal/auth"
+	"github.com/kfrz/gh-governor/internal/client"
+	"github.com/kfrz/gh-governor/internal/repo"
 )
 
 var RootCmd = &cobra.Command{
@@ -31,20 +33,25 @@ See README.md for more information, including usage examples.`,
 	},
 	// RunE is the main entry point for the root command.
 	RunE: func(cmd *cobra.Command, args []string) error {
-		if len(args) == 0 {
-			err := cmd.Help()
-			if err != nil {
-				zap.L().Error("error occurred while running cmd.Help()", zap.Error(err))
-				return err
-			}
-		}
+		// if len(args) == 0 {
+		// 	err := cmd.Help()
+		// 	if err != nil {
+		// 		zap.L().Error("error occurred while running cmd.Help()", zap.Error(err))
+		// 		return err
+		// 	}
+		// }
 		zap.L().Debug("running gh-governor RunE()")
+		if err := repo.PrintCurrentRepoStatus(); err != nil {
+			zap.L().Error("error occurred while fetching repo status", zap.Error(err))
+			return err
+		}
+
 		return nil
 	},
 }
 
 func Execute() error {
-	if err := auth.CheckAuthStatus(RootCmd, nil); err != nil {
+	if err := auth.CheckAuthStatus(client.GraphQL); err != nil {
 		zap.L().Error("error occurred while checking auth status", zap.Error(err))
 		return err
 	}

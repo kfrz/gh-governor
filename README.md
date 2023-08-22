@@ -110,7 +110,6 @@ enforcers:
         enabled: true
         arguments:
         default_branch_name: "main"
-    ```
 ```
 
 You can run `gh governor --config <path-to-file>` to run `gh-governor` against another config file.
