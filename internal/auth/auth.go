@@ -14,16 +14,17 @@ import (
 func CheckAuthStatus(client client.GraphQLClient) error {
 	query := queries.UserCurrentQuery{}
 	if err := client.Query("UserCurrent", &query, nil); err != nil {
-		zap.L().Error("Authentication failed", zap.Error(err))
+		zap.L().Debug("Authentication failed", zap.Error(err))
+		fmt.Println("💡 Try running 'gh auth status'")
 		return fmt.Errorf("failed to fetch current user details: %v", err)
 	}
 
 	err := repo.PrintCurrentRepoStatus()
 	if err != nil {
-		zap.L().Error("Failed to get repository status", zap.Error(err))
+		zap.L().Debug("Failed to get repository status", zap.Error(err))
 		return fmt.Errorf("failed while checking repo status: %w", err)
 	}
 
-	zap.L().Debug("Authenticated to github", zap.String("user", query.Viewer.Login))
+	zap.L().Info("🔐 Authenticated to github", zap.String("user", query.Viewer.Login))
 	return nil
 }

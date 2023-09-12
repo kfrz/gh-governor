@@ -3,7 +3,7 @@
 ## Development
 
 1. Use Golang version >= 1.20.7
-1. Fork or clone this repository (https://github.com/kfrz/gh-governor
+1. Fork or clone this repository (https://github.com/kfrz/gh-governor)
 
     ```sh
     gh repo clone kfrz/gh-governor
@@ -19,10 +19,9 @@
 
 Bugs, feature requests and comments are more than welcome. Please submit an [issue](https://github.com/kfrz/gh-governor).
 
+### Style & Conventions
 
-### Style & Conventions 
-
-#### Commit Messages 
+#### Commit Messages
 
 This project is configured to generate changelogs using [git-chglog](https://github.com/git-chglog/git-chglog). To ensure changelogs are generated correctly, please follow the commit message guidelines below.
 
