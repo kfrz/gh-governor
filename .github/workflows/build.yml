@@ -1,0 +1,49 @@
+name: Build 
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.20.7
+
+    - name: Run Tests
+      run: go test ./...
+
+    - name: Build
+      run: go build -o gh-governor
+
+    - name: Decode GPG key
+      run: echo "${{ secrets.GPG_PRIVATE_KEY }}" | base64 -d > private_key.gpg
+
+    - name: Import GPG Key
+      run: |
+        gpg --batch --yes --import private_key.gpg
+        git config --global user.signingkey $(gpg --list-secret-keys --keyid-format LONG | grep sec | awk '{print $2}' | awk -F'/' '{print $2}')
+        git config --global commit.gpgsign true
+
+    - name: Sign Binary with GPG
+      run: |
+        echo "${{ secrets.GPG_PASSPHRASE }}" | base64 -d | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 --detach-sign --armor gh-governor
+
+    - name: Archive binaries and signatures
+      uses: actions/upload-artifact@v2
+      with:
+        name: binaries
+        path: |
+          gh-governor
+          gh-governor.asc
